@@ -50,13 +50,13 @@ update {
 }
 
 split {
-	return settings["The Streets of Hogsmeade"] && current.map == "hogsmeade" && old.map == "gringotts" ||
-		   settings["Problem with Security"] && current.map == "stairs_hall_comp_boss" && old.map == "hogsmeade" ||
-		   settings["The Basilisk Fang"] && current.map == "cos_tunnels" && old.map == "stairs_hall_comp_boss" ||
-		   settings["Job to Do"] && current.map == "covered_bridge" && old.map == "cos_tunnels" ||
-		   settings["Giant Problem"] && current.map == "viaduct_courtyrd_complete" && old.map == "covered_bridge" ||
-		   settings["The Lost Diadem"] && current.map == "ror" && old.map == "viaduct_courtyrd_complete" ||
-		   settings["The Battle of Hogwarts"] && current.map == "battle_1" && old.map == "ror" ||
+	return settings["The Streets of Hogsmeade"] && current.map == "hogsmeade" && old.map == "gringotts" || // working
+		   settings["Problem with Security"] && current.map == "stairs_hall_comp_boss" && old.map == "hogsmeade" || // working
+		   settings["The Basilisk Fang"] && current.map == "cos_tunnels" && old.map == "stairs_hall_comp_boss" || // working
+		   settings["Job to Do"] && current.map == "covered_bridge" && old.map == "cos_room_fca" || // working
+		   settings["Giant Problem"] && current.map == "viaduct_courtyrd_complete" && old.map == "covered_bridge_fca" || // working
+		   settings["The Lost Diadem"] && current.map == "ror" && old.map == "viaduct_courtyrd_complete" || // working
+		   settings["The Battle of Hogwarts"] && current.map == "battle_1" && old.map == "ror_fca" || // working
 		   settings["Surrender"] && current.map == "viaduct_court_dam_night" && old.map == "battle_1" ||
 		   settings["A Turn of Events"] && current.map == "viaduct_court_dam_boss_2" && old.map == "viaduct_court_dam_night" ||
 		   settings["Not my Daughter"] && current.map == "viaduct_court_dam_dawn" && old.map == "viaduct_court_dam_boss_2" ||
