@@ -52,7 +52,7 @@ update {
 split {
 	return settings["The Streets of Hogsmeade"] && current.map == "hogsmeade" && old.map == "gringotts" ||
 		   settings["Problem with Security"] && current.map == "stairs_hall_comp_boss" && old.map != "stairs_hall_comp_boss" ||
-		   settings["The Basilisk Fang"] && current.map == "cos_tunnels" && old.map == "stairs_hall_comp_boss" ||
+		   settings["The Basilisk Fang"] && current.map == "cos_tunnels" && old.map != "cos_tunnels" ||
 		   settings["Job to Do"] && current.map == "covered_bridge" && old.map != "covered_bridge" ||
 		   settings["Giant Problem"] && current.map == "viaduct_courtyrd_complete" && old.map != "viaduct_courtyrd_complete" ||
 		   settings["The Lost Diadem"] && current.map == "ror" && old.map != "ror" ||
