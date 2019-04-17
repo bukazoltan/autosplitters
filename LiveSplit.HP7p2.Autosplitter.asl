@@ -66,5 +66,5 @@ split {
 }
 
 reset {
-	return current.map == "ntend~frontendlocation_eng_gb" && old.map != "ntend~frontendlocation_eng_gb";
+
 }
