@@ -32,6 +32,7 @@ startup
 	}
 	settings.Add("halfsplit", false, "...Neville gets control on a Job to Do.", "others");
 	settings.Add("endsplit", true, "...the final cutscene gets triggered", "others");
+	settings.Add("ginnysplit", false "...after the long Ginny fight", "others");
 
 }
 
@@ -62,7 +63,8 @@ split {
 		   settings["Not my Daughter"] && current.map == "viaduct_court_dam_dawn" && old.map != "viaduct_court_dam_dawn" ||
 		   settings["Voldemorts Last Stand"] && current.map == "battle_1_boss" && old.map != "battle_1_boss" ||
 		   settings["halfsplit"] && old.eventChange == "_bridge_planting_charges" && current.eventChange == "_bridge_protect_seamus" ||
-		   settings["endsplit"] && old.eventChange == "b_final_harry_voldy_duel" && current.eventChange == "playvideo";
+		   settings["endsplit"] && old.eventChange == "b_final_harry_voldy_duel" && current.eventChange == "playvideo" ||
+		   settings["ginnysplit"] && current.map == "stairs_hall_dam_boss" && old.map != "stairs_hall_dam_boss";
 }
 
 reset {
