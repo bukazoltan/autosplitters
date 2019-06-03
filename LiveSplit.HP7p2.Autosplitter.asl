@@ -31,8 +31,8 @@ startup
 		settings.Add(splits, true);
 	}
 	settings.Add("halfsplit", false, "...Neville gets control on a Job to Do.", "others");
-	settings.Add("endsplit", true, "...the final cutscene gets triggered", "others");
-	settings.Add("ginnysplit", false, "...after the long Ginny fight", "others");
+	settings.Add("endsplit", true, "...the final cutscene gets triggered.", "others");
+	settings.Add("ginnysplit", false, "...Ginny has finished defending the castle.", "others");
 
 }
 
