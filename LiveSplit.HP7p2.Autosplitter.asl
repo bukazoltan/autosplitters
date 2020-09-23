@@ -13,6 +13,7 @@ init
 startup
 {
 	settings.Add("load-removal", true, "Enable load removal");
+	settings.Add("autostart", false, "Enable autostart (not accurate)");
 	settings.Add("levels", true, "Split before these levels get loaded:");
 	settings.Add("others", true, "Split when...");
 	vars.splitSettings = new List<string> {
@@ -39,7 +40,7 @@ startup
 }
 
 start {
-	return current.map == "gringotts" && old.map == "ntend~frontendlocation_eng_gb"; // start is not accurate atm
+	return settings["autostart"] && current.map == "gringotts" && old.map == "ntend~frontendlocation_eng_gb"; // start is not accurate atm
 }
 
 isLoading
