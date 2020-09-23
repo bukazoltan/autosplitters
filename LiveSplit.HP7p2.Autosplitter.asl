@@ -1,4 +1,7 @@
-﻿state("hp8")
+﻿// Autosplitter done by mczolly
+// Load removal done by Flo203
+
+state("hp8")
 {
 	string30 map: "hp8.exe", 0x04FBBCF; // name of the map you are currently on; changes on every load
 	string30 eventChange: "hp8.exe", 0x04DF14F; // value is "playvideo" whenever a cutscene plays
