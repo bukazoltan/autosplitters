@@ -2,6 +2,7 @@
 {
 	string30 map: "hp8.exe", 0x04FBBCF; // name of the map you are currently on; changes on every load
 	string30 eventChange: "hp8.exe", 0x04DF14F; // value is "playvideo" whenever a cutscene plays
+	bool isLoading: 0x51CC94; // returns true when there are loads
 }
 
 init
@@ -11,6 +12,7 @@ init
 
 startup
 {
+	settings.Add("load-removal", true, "Enable load removal");
 	settings.Add("levels", true, "Split before these levels get loaded:");
 	settings.Add("others", true, "Split when...");
 	vars.splitSettings = new List<string> {
@@ -39,6 +41,11 @@ startup
 start {
 	return current.map == "gringotts" && old.map == "ntend~frontendlocation_eng_gb"; // start is not accurate atm
 }
+
+isLoading
+{
+    return settings["load-removal"] && current.isLoading;
+}	
 
 exit {
 
