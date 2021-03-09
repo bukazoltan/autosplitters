@@ -44,8 +44,8 @@ startup
 }
 
 start {
-	return (settings["autostart"] && current.map == "gringotts" && old.map == "ntend~frontendlocation_eng_gb") ||
-	(settings["autostartIL"] && old.isLoading && !current.isLoading && current.map != "ntend~frontendlocation_eng_gb");
+	return (settings["autostart"] && current.map == "gringotts" && old.map.Contains("ntend~frontendlocation")) ||
+	(settings["autostartIL"] && old.isLoading && !current.isLoading && !current.map.Contains("ntend~frontendlocation"));
 }
 
 isLoading
