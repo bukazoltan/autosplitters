@@ -45,6 +45,7 @@ startup
 		{"_carrows", 				 "_snape", 					"We have to fight Snape", "stairs_hall_comp_boss"}
 	};
 
+
 	settings.Add("load-removal", true, "Enable load removal");
 	settings.Add("autostart", true, "Enable autostart (full run)");
 	settings.Add("autostartIL", false, "Enable autostart (individual levels)");
