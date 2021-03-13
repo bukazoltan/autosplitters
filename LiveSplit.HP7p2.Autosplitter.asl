@@ -1,85 +1,82 @@
-﻿// Autosplitter done by mczolly
+// Autosplitter done by mczolly and marczeslaw
 // Load removal done by Flo203
 
 state("hp8")
 {
-	string30 map: "hp8.exe", 0x04FBBCF; // name of the map you are currently on; changes on every load
+	string30 map: "hp8.exe", 0x04FBBCF; 		// name of the map you are currently on; changes on every load
 	string30 eventChange: "hp8.exe", 0x04DF14F; // value is "playvideo" whenever a cutscene plays
-	bool isLoading: 0x51CC94; // returns true when there are loads
-}
-
-init
-{
-
+	bool isLoading: 0x51CC94; 					// returns true when there are loads
 }
 
 startup
 {
-	settings.Add("load-removal", true, "Enable load removal");
-	settings.Add("autostart", true, "Enable autostart (full game)");
-	settings.Add("autostartIL", false, "Enable autostart (individual levels)");
-	settings.Add("levels", true, "Split before these levels get loaded:");
-	settings.Add("others", true, "Split when...");
-	vars.splitSettings = new List<string> {
-		"The Streets of Hogsmeade",
-		"Problem with Security",
-		"The Basilisk Fang",
-		"Job to Do",
-		"Giant Problem",
-		"The Lost Diadem",
-		"The Battle of Hogwarts",
-		"Surrender",
-		"A Turn of Events",
-		"Not my Daughter",
-		"Voldemorts Last Stand",
+	var LevelNames = new Dictionary<string, string> 				// <map name, text next to checkbox> 
+	{
+		{				 "hogsmeade", "The Streets of Hogsmeade"},
+		{	 "stairs_hall_comp_boss", "Problem with Security"},
+		{			   "cos_tunnels", "The Basilisk Fang"},
+		{			"covered_bridge", "Job to Do"},
+		{"viaduct_courtyrd_complete", "Giant Problem"},
+		{					   "ror", "The Lost Diadem"},
+		{				  "battle_1", "The Battle of Hogwarts"},
+		{  "viaduct_court_dam_night", "Surrender"},
+		{ "viaduct_court_dam_boss_2", "A Turn of Events"},
+		{   "viaduct_court_dam_dawn", "Not my Daughter"},
+		{			 "battle_1_boss", "Voldemorts Last Stand"}				
 	};
-	settings.CurrentDefaultParent = "levels";
-	foreach (string splits in vars.splitSettings) {
-		settings.Add(splits, true);
-	}
-	settings.Add("halfsplit", false, "...Neville gets control on a Job to Do.", "others");
-	settings.Add("endsplit", true, "...the final cutscene gets triggered.", "others");
-	settings.Add("ginnysplit", false, "...Ginny has finished defending the castle.", "others");
 
+	var subMap = new String[,]					// <map name, text next to checkbox, main split name>
+	{
+		{	 "stairs_hall_dam_boss", "Ginny has finished defending the castle",  "viaduct_court_dam_dawn"},
+		{"viaduct_court_dam_boss_3", "We defeated Voldemort at the bridges",     "battle_1_boss"},
+		{				  "ror_fca", "Running out of Room of Requirements", 	 "ror"},
+		{	 "stairs_hall_complete", "We enter the castle", 		 			 "battle_1"},
+		{"viaduct_court_dam_boss_1", "We leave the castle", 					 "battle_1"},
+		{		 "forbidden_forest", "We enter the Forest", 					 "viaduct_court_dam_night"},
+		{	  "stairs_hall_dam_fca", "We defeated Voldemort for the first time", "viaduct_court_dam_boss_2"},
+		{	   "stairs_hall_damage", "We have to escape from Voldemort", 				 "viaduct_court_dam_boss_2"},
+		{			 "cos_room_fca", "We have to run out of Chamber", 			 "cos_tunnels"},
+		{			 "boathouse", 	 "We defeated Greyback", 				 	 "battle_1"}
+	};
+
+	var subEvent = new String[,]			// <old event, current event, text next to checkbox, main split name>
+	{
+		{"_bridge_planting_charges", "_bridge_protect_seamus",  "Neville gets control",   "covered_bridge"},
+		{"_carrows", 				 "_snape", 					"We have to fight Snape", "stairs_hall_comp_boss"}
+	};
+
+
+	settings.Add("load-removal", true, "Enable load removal");
+	settings.Add("autostart", true, "Enable autostart (full run)");
+	settings.Add("autostartIL", false, "Enable autostart (individual levels)");
+	settings.Add("levels", true, "Split starting segment or on certain event:");
+
+	foreach (var Level in LevelNames)						
+		settings.Add(Level.Key, true, Level.Value, "levels");
+
+	for (int i = 0; i < subMap.GetLength(0); i++)
+		settings.Add(subMap[i, 0], false, subMap[i, 1], subMap[i, 2]);
+
+	for (int i = 0; i < subEvent.GetLength(0); i++)
+		settings.Add(subEvent[i, 0] + subEvent[i, 1], false, subEvent[i, 2], subEvent[i, 3]);
+
+	settings.Add("b_final_harry_voldy_duel" + "playvideo", true, "The final cutscene starts", "battle_1_boss");
 }
 
 start {
-	return (settings["autostart"] && current.map == "gringotts" && old.map.Contains("ntend~frontendlocation")) ||
-	(settings["autostartIL"] && old.isLoading && !current.isLoading && !current.map.Contains("ntend~frontendlocation"));
+    return (settings["autostart"] && current.map == "gringotts" && old.map.Contains("ntend~frontendlocation")) ||
+    (settings["autostartIL"] && old.isLoading && !current.isLoading && !current.map.Contains("ntend~frontendlocation"));
 }
 
 isLoading
 {
     return settings["load-removal"] && current.isLoading;
-}	
-
-exit {
-
 }
 
-update {
-	// only for debugging
-	print(current.map);
-	print(current.eventChange);
-}
-
-split {
-	return settings["The Streets of Hogsmeade"] && current.map == "hogsmeade" && old.map == "gringotts" ||
-		   settings["Problem with Security"] && current.map == "stairs_hall_comp_boss" && old.map != "stairs_hall_comp_boss" ||
-		   settings["The Basilisk Fang"] && current.map == "cos_tunnels" && old.map != "cos_tunnels" ||
-		   settings["Job to Do"] && current.map == "covered_bridge" && old.map != "covered_bridge" ||
-		   settings["Giant Problem"] && current.map == "viaduct_courtyrd_complete" && old.map != "viaduct_courtyrd_complete" ||
-		   settings["The Lost Diadem"] && current.map == "ror" && old.map != "ror" ||
-		   settings["The Battle of Hogwarts"] && current.map == "battle_1" && old.map != "battle_1" ||
-		   settings["Surrender"] && current.map == "viaduct_court_dam_night" && old.map != "viaduct_court_dam_night" ||
-		   settings["A Turn of Events"] && current.map == "viaduct_court_dam_boss_2" && old.map != "viaduct_court_dam_boss_2" ||
-		   settings["Not my Daughter"] && current.map == "viaduct_court_dam_dawn" && old.map != "viaduct_court_dam_dawn" ||
-		   settings["Voldemorts Last Stand"] && current.map == "battle_1_boss" && old.map != "battle_1_boss" ||
-		   settings["halfsplit"] && old.eventChange == "_bridge_planting_charges" && current.eventChange == "_bridge_protect_seamus" ||
-		   settings["endsplit"] && old.eventChange == "b_final_harry_voldy_duel" && current.eventChange == "playvideo" ||
-		   settings["ginnysplit"] && current.map == "stairs_hall_dam_boss" && old.map != "stairs_hall_dam_boss";
-}
-
-reset {
-
+split
+{
+	if (old.map != current.map && !old.map.Contains("ntend~frontendlocation"))
+		{ return settings[current.map]; }
+	else if (old.eventChange != current.eventChange)
+		{ return settings[old.eventChange + current.eventChange]; }
 }
