@@ -6,6 +6,14 @@ state("hp8")
 	string30 map: "hp8.exe", 0x04FBBCF; 		// name of the map you are currently on; changes on every load
 	string30 eventChange: "hp8.exe", 0x04DF14F; // value is "playvideo" whenever a cutscene plays
 	bool isLoading: 0x51CC94; 					// returns true when there are loads
+	float xcoord: 0x4E3BF8;
+	//float ycoord: 0x4E3BFC;
+	float zcoord: 0x4E3C00;
+}
+
+init
+{
+	vars.final_col = true;
 }
 
 startup
@@ -49,6 +57,7 @@ startup
 	settings.Add("load-removal", true, "Enable load removal");
 	settings.Add("autostart", true, "Enable autostart (full run)");
 	settings.Add("autostartIL", false, "Enable autostart (individual levels)");
+	settings.Add("hundo final", true, "Split on the last collectible in hundo's route");
 	settings.Add("levels", true, "Split starting segment or on certain event:");
 
 	foreach (var Level in LevelNames)						
@@ -61,6 +70,7 @@ startup
 		settings.Add(subEvent[i, 0] + subEvent[i, 1], false, subEvent[i, 2], subEvent[i, 3]);
 
 	settings.Add("b_final_harry_voldy_duel" + "playvideo", true, "The final cutscene starts", "battle_1_boss");
+
 }
 
 start {
@@ -79,4 +89,11 @@ split
 		{ return settings[current.map]; }
 	else if (old.eventChange != current.eventChange)
 		{ return settings[old.eventChange + current.eventChange]; }
+	else if(current.map == "hogsmeade" && vars.final_col
+		&& current.xcoord > 117.45 && current.xcoord < 118.25
+		&& current.zcoord > -25.15 && current.zcoord < -24.35)
+		{ 
+			vars.final_col = false;
+			return settings["hundo final"]; 
+		}
 }
